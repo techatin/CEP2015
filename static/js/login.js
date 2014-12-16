@@ -11,9 +11,9 @@
   var form = document.forms[0];
   form.onsubmit = submit;
   function submit(){
-    var id = form.username.value,
+    var username = form.username.value,
         password = form.password.value;
-    if (id === '' || password === '') {
+    if (username === '' || password === '') {
       if (state === 1) return false;
       if (state === 2) {
         $('.login-error[name="invalid"]').toggleClass('show');
@@ -43,14 +43,14 @@
           state = 2;
         }
         else if (this.status === 200 && !res.error) {
-          window.location.href = 'dashboard.html';
+          window.location.href = 'dashboard';
         }
       }
     }
     var data= {};
-    data.id = id;
+    data.username = username;
     data.password = password;
-    loginRequest.open("POST", "/login.html");
+    loginRequest.open("POST", "/login");
     loginRequest.setRequestHeader("Content-Type", "application/json");
     loginRequest.send(JSON.stringify(data));
     return false;
