@@ -36,11 +36,6 @@ app.use(express.static(__dirname + '/../static/js', { maxAge: 86400000 }));
 app.use(express.static(__dirname + '/../static/assets', { maxAge: 86400000 }));
 app.use(express.static(__dirname + '/../static/bower_components', { maxAge: 86400000 }));
 
-app.use(function (req, res, next) {
-  console.log(req.session);
-  next();
-});
-
 require('./routes.js')(app, config);
 
 // Signup for test account

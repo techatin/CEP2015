@@ -44,12 +44,8 @@ button {
   margin-top: 1.8em;
 }
 
-.login-error {
+#invalid-login, #empty-login {
   display: none;
   color: #FF0000;
   font-size: 1.2em;
-}
-
-.show {
-  display: block;
 }

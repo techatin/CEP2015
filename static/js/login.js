@@ -7,46 +7,49 @@
 */
 
 (function () {
-  var state = 0;
-  var form = document.forms[0];
+  var
+    state = 0,
+    form = document.getElementById('login-form');
   form.onsubmit = submit;
-  function submit(){
-    var username = form.username.value,
-        password = form.password.value;
+  var
+    invalidLogin = document.getElementById('invalid-login'),
+    emptyLogin = document.getElementById('empty-login');
+  
+  function submit() {
+    var
+      username = document.getElementById('first-ele').value,
+      password = document.getElementById('second-ele').value;
+    
     if (username === '' || password === '') {
-      if (state === 1) return false;
-      if (state === 2) {
-        $('.login-error[name="invalid"]').toggleClass('show');
+      if (state === 1) {
+        switchAni(emptyLogin);
+        return false;
       }
-      $('.login-error[name="empty"]').addClass('show');
+      if (state === 2) {
+        invalidLogin.style.display = 'none';
+      }
+      emptyLogin.style.display = 'block';
       state = 1;
       return false;
     }
-    if (state === 1) {
-      $('.login-error[name="empty"]').toggleClass('show');
-      state = 0;
-    }
-    if (state === 2) {
-      $('.login-error[name="invalid"]').toggleClass('show');
-      state = 0;
-    }
     var loginRequest = new XMLHttpRequest();
-    loginRequest.onreadystatechange = function() {
-      if (this.readyState === 4){
-        var res = JSON.parse(this.responseText);
-        if (this.status === 200 && res.error) {
-          if (state === 2) return false;
-          if (state === 1){
-            $('.login-error[name="empty"]').toggleClass('show');
-          }
-          $('.login-error[name="invalid"]').addClass('show');
-          state = 2;
+    loginRequest.onload = function() {
+      var res = JSON.parse(this.response);
+      if (res.error) {
+        if (state === 2) {
+          switchAni(invalidLogin);
+          return false;
         }
-        else if (this.status === 200 && !res.error) {
-          window.location.href = 'dashboard';
+        if (state === 1) {
+          emptyLogin.style.display = 'none';
         }
+        invalidLogin.style.display = 'block';
+        state = 2;
       }
-    }
+      else if (!res.error) {
+        window.location.href = 'dashboard';
+      }
+    };
     var data= {};
     data.username = username;
     data.password = password;
@@ -54,5 +57,12 @@
     loginRequest.setRequestHeader("Content-Type", "application/json");
     loginRequest.send(JSON.stringify(data));
     return false;
+  }
+  
+  function switchAni(el) {
+    el.style.display = 'none';
+    setTimeout(function() {
+      el.style.display = 'block';
+    }, 50);
   }
 })();

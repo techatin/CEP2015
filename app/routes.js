@@ -11,11 +11,14 @@ var
   signUp = account_helper.signUp;
 
 function routes (app) {
+
+  // Redirect from '/' to login/dashboard page
   app.get('/', function (req, res) {
     if (req.session.signedIn) res.redirect('/dashboard');
     else res.redirect('/login');
   });
   
+  // Redirect based on session
   app.use(function (req, res, next) {
     if (req.path !== '/login') {
       if (!req.session.signedIn) res.redirect('/login');
@@ -25,14 +28,12 @@ function routes (app) {
     return next();
   });
   
+  // Routes
+  
   app.get('/login', function (req, res) {
     res.sendFile(path.resolve(__dirname + '/../static/login.html'));
   });
   
-  app.get('/dashboard', function (req, res) {
-    res.sendFile(path.resolve(__dirname + '/../static/dashboard.html'));
-  });
-
   app.post('/login', jsonParser, function (req, res) {
     login(req.body.username, req.body.password, function (err, data) {
       if (err) console.error(err);
@@ -44,5 +45,18 @@ function routes (app) {
         res.end(JSON.stringify({ error: false }));
       }
     });
+  });
+  
+  app.get('/dashboard', function (req, res) {
+    res.sendFile(path.resolve(__dirname + '/../static/dashboard.html'));
+  });
+  
+  app.get('/loadDashboard', function (req, res) {
+    res.end(JSON.stringify({ username: req.session.user }));
+  });
+  
+  app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/login');
   });
 }
