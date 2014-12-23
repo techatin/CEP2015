@@ -18,14 +18,14 @@ form {
   margin-top: 1em;
 }
 
-.first-ele {
+#first-ele {
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.second-ele {
+#second-ele {
   border-bottom-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
   border-top-left-radius: 0;
@@ -44,7 +44,7 @@ button {
   margin-top: 1.8em;
 }
 
-#invalid-login, #empty-login {
+#invalid-login {
   display: none;
   color: #FF0000;
   font-size: 1.2em;

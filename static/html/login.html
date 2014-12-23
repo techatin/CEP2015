@@ -2,18 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>瑞隆生产管理系统 | 登陆</title>
+    <title>登陆</title>
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="login.css">
   </head>
   <body>
     <div class="fullpage">
-      <img src="logo.png">
+      <img src="logo-232-261.png" width="232" height="261">
       <form role="form" method="post" id="login-form">
         <span id="invalid-login">Invalid ID/Password Combination</span>
-        <span id="empty-login">Empty ID/Password</span>
-        <input type="text" id="first-ele" class="form-control" placeholder="输入用户名" name="username">
-        <input type="password" id="second-ele" class="form-control" placeholder="输入密码" name="password">
+        <input type="text" id="first-ele" class="form-control" placeholder="输入用户名" name="username" required>
+        <input type="password" id="second-ele" class="form-control" placeholder="输入密码" name="password" required>
         <button type="submit" class="btn btn-success btn-lg">登陆</button>
       </form>
     </div>

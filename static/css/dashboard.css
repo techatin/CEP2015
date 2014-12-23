@@ -16,3 +16,8 @@ nav {
   margin-left: 5em;
   margin-right: 3em;
 }
+
+a#user {
+  display: inline-block;
+  padding-left: 0;
+}

@@ -16,5 +16,13 @@ function docExists (db, doc, cb) {
   });
 }
 
+function getDoc (db, doc, cb) {
+  db.get(doc, function (err, doc) {
+    if (err) return cb(err, null);
+    return cb(null, doc);
+  })
+}
+
 exports.dbConn = dbConn;
 exports.docExists = docExists;
+exports.getDoc = getDoc;

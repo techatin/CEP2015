@@ -1,0 +1,66 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: #EDA547;
+  font-size: 1em;
+}
+
+.logo {
+  margin-left: 2em;
+  margin-top: 2em;
+}
+
+nav {
+  margin-top: 5em;
+  margin-left: 5em;
+  margin-right: 3em;
+}
+
+a#user {
+  display: inline-block;
+  padding-left: 0;
+}
+
+#signUpForm {
+  display: none;
+}
+
+form {
+  margin: 0 auto;
+  margin-top: 1em;
+}
+
+input[type="text"], input[type="password"] {
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  margin-top: 0.5em;
+}
+
+.form-control {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5em;
+  padding: 0.8em;
+  font-size: 1em;
+  width: 40%;
+  text-align: center;
+}
+
+button {
+  margin-top: 1.8em;
+}
+
+#unmatched-passwords, #username-exists {
+  display: none;
+  color: #FF0000;
+  font-size: 1em;
+}
+
+#usersList {
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+}
