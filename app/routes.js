@@ -8,7 +8,10 @@ var
   account_helper = require('./backend_helpers/account_helper.js'),
   login = account_helper.login,
   signUp = account_helper.signUp,
-  getUserInfo = account_helper.getUserInfo;
+  getUserInfo = account_helper.getUserInfo,
+  getAllUsers = account_helper.getAllUsers,
+  removeUser = account_helper.removeUser,
+  updateUserInfo = account_helper.updateUserInfo;
   //db_helper = require('./backend_helpers/db_helper.js');
 
 function routes (app) {
@@ -48,15 +51,37 @@ function routes (app) {
   
   .post(jsonParser, function (req, res) {
     login(req.body.username, req.body.password, function (err, data) {
-      if (err) console.error(err);
-      if (!data) res.end(JSON.stringify({ error: true }));
+      if (err && err.error !== 'not_found') {
+        console.error(err);
+        res.end(JSON.stringify({
+          error: {
+            message: err
+          }
+        }));
+      }
+      else if (!data || (err && err.error === 'not_found')) {
+        res.end(JSON.stringify({
+          error: {
+            message: 'invalid username/password'
+          }
+        }));
+      }
       else {
         getUserInfo(req.body.username, function (err, data) {
-          if (err) console.error(err);
+          if (err) {
+            console.error(err);
+            res.end(JSON.stringify({
+              error: {
+                message: err
+              }
+            }));
+          }
           req.session.user = data;
+          req.session.signedIn = true;
+          res.end(JSON.stringify({
+            error: null
+          }));
         });
-        req.session.signedIn = true;
-        res.end(JSON.stringify({ error: false }));
       }
     });
   });
@@ -79,7 +104,7 @@ function routes (app) {
   
   adminRouter.get('/', function (req, res) {
     res.sendFile(path.resolve(__dirname + '/../static/html/admin.html'))
-  })
+  });
   
   adminRouter.post('/adduser', jsonParser, function (req, res) {
     signUp({
@@ -87,8 +112,54 @@ function routes (app) {
       password: req.body.password,
       isAdmin: req.body.isAdmin
     }, function(err) {
-      if (err === 'Error: user already exists') res.end(JSON.stringify({ error: true }));
-      else res.end(JSON.stringify({ error: false }));
+      if (err) {
+        console.error(err);
+        res.end(JSON.stringify({
+          error: {
+            message: err
+          }
+        }));
+      }
+      else {
+        res.end(JSON.stringify({
+          error: null
+        }));
+      }
+    });
+  });
+  
+  adminRouter.post('/edituser', jsonParser, function (req, res) {
+    updateUserInfo(req.body.username, req.body.fields, function(err, data) {
+      if (err) {
+        console.error(err);
+        res.end(JSON.stringify({
+          error: {
+            message: err
+          }
+        }));
+      }
+      else {
+        res.end(JSON.stringify({
+          error: null
+        }));
+      }
+    });
+  });
+  
+  adminRouter.post('/removeuser', jsonParser, function (req, res) {
+    removeUser(req.body.username, function(err, data) {
+      if (err) {
+        res.end(JSON.stringify({
+          error: {
+            message: err
+          }
+        }));
+      }
+      else {
+        res.end(JSON.stringify({
+          error: null
+        }));
+      }
     });
   });
   
@@ -101,6 +172,25 @@ function routes (app) {
   
   app.get('/loadDashboard', function (req, res) {
     res.end(JSON.stringify(req.session.user));
+  });
+  
+  app.get('/loadFullAdminPanel', function (req, res) {
+    var fullAdminPanelData = {};
+    fullAdminPanelData.user = req.session.user;
+    getAllUsers(function (err, data) {
+      if (err) console.error(err);
+      fullAdminPanelData.usersList = data;
+      res.end(JSON.stringify(fullAdminPanelData));
+    });
+  });
+  
+  app.get('/loadUsersList', function (req, res) {
+    var usersList = {};
+    getAllUsers(function (err, data) {
+      if (err) console.error(err);
+      usersList.usersList = data;
+      res.end(JSON.stringify(usersList));
+    });
   });
   
   // Invalid Route

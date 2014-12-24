@@ -30,9 +30,7 @@
     <div class="container-fluid">
       <div class="col-lg-6">
         <h3>用户列表</h3>
-        <div id="usersList">
-          loremipsum
-        </div>
+        <div id="usersList"></div>
         <button type="button" class="btn btn-success" id="addUser">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加用户
         </button>
@@ -42,15 +40,41 @@
         <form role="form" method="post" id="signUpForm">
           <span id="unmatched-passwords">Passwords Do Not Match</span>
           <span id="username-exists">Username Already Exists</span>
-          <input type="text" class="form-control" placeholder="输入用户名" name="username" required>
-          <input type="password" class="form-control" placeholder="输入密码" name="password" required>
-          <input type="password" class="form-control" placeholder="再次输入密码" name="rpassword" required>
-          <select class="form-control">
+          <span id="invalid-username">Username (3-16 Alphanumeric characters)</span>
+          <span id="invalid-password">Password (8-24 Characters, no whitespace)</span>
+          <input type="text" class="form-control signUpForm-control" placeholder="输入用户名" name="username" required>
+          <input type="password" class="form-control signUpForm-control" placeholder="输入密码" name="password" required>
+          <input type="password" class="form-control signUpForm-control" placeholder="再次输入密码" name="rpassword" required>
+          <select class="form-control signUpForm-control">
             <option>普通用户</option>
             <option>管理员</option>
           </select>
           <button type="submit" class="btn btn-success btn" id="addUser">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加用户
+          </button>
+        </form>
+        
+        <form role="form" method="post" id="editUserForm" class="form-horizontal">
+          <div class="form-group">
+            <label for="editUserFormUsername" class="col-lg-2 control-label">用户名</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="editUserFormUsername" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editUserFormPermission" class="col-lg-2 control-label">权限</label>
+            <div class="col-lg-10">
+              <select id="editUserFormPermission" class="form-control">
+                <option>普通用户</option>
+                <option>管理员</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success" disabled="disabled" id="updateUserInfoButton">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 更新用户资料
+          </button>
+          <button type="button" class="btn btn-danger" id="removeUserButton">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 移除用户
           </button>
         </form>
       </div>

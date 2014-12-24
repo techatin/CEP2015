@@ -4,12 +4,16 @@ var
   dbConn = db_helper.dbConn,
   docExists = db_helper.docExists,
   getDoc = db_helper.getDoc,
+  removeDoc = db_helper.removeDoc,
+  updateDoc = db_helper.updateDoc,
   usersDb = dbConn.database('users');
 
 function signUp (options, cb) {
-  if (!options.username) return cb('Signup Error: username not provided');
-  if (!options.password) return cb('Signup Error: password not provided');
+  if (!options.username || options.username === '') return cb('Signup Error: username not provided');
+  if (!options.password || options.username === '') return cb('Signup Error: password not provided');
   if (options.isAdmin === undefined) return cb('Signup Error: isAdmin not provided');
+  if (!/^[a-z0-9]{3,16}$/i.test(options.username)) return cb('Signup Error: invalid username');
+  if (!/^[\S]{8,24}$/i.test(options.password)) return cb('Signup Error: invalid password');
   
   var username = options.username;
   var password = options.password;
@@ -35,17 +39,22 @@ function signUp (options, cb) {
   });
 }
 
-function login (username, password, cb) {
+function removeUser(username, cb) {
+  removeDoc(usersDb, username, function(err, res) {
+    return cb(err, res);
+  });
+}
+
+function login(username, password, cb) {
   usersDb.get(username, function (err, user) {
-    if (err && err.error === 'not_found') return cb (null, false);
-    if (err) return cb (err, false);
+    if (err) return cb (err, null);
     bcrypt.compare(password, user.password, function (err, res) {
       return cb (err, res);
     })
   });
 }
 
-function getUserInfo (username, cb) {
+function getUserInfo(username, cb) {
   getDoc(usersDb, username, function (err, data) {
     if (err) return cb(err, null);
     delete data._rev;
@@ -55,6 +64,22 @@ function getUserInfo (username, cb) {
   });
 }
 
+function updateUserInfo(username, fields, cb) {
+  updateDoc(usersDb, username, fields, function(err, res) {
+    return cb(err, res);
+  });
+}
+
+function getAllUsers(cb) {
+  usersDb.view('users/all', function(err, res) {
+    if (err) return cb(err, null);
+    cb(null, res);
+  })
+}
+
 exports.login = login;
 exports.signUp = signUp;
+exports.removeUser = removeUser;
 exports.getUserInfo = getUserInfo;
+exports.updateUserInfo = updateUserInfo;
+exports.getAllUsers = getAllUsers;

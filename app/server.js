@@ -13,8 +13,8 @@ var
   morgan = require('morgan');
 
 var
-  port = config.serverPort,
-  host = config.serverHost;
+  port = config.server.PORT,
+  host = config.server.HOST;
 server.listen(port, host, function () {
   console.log("Server listening on " + host + ":" + port);
 });
@@ -37,16 +37,3 @@ app.use(express.static(__dirname + '/../static/assets'));
 app.use(express.static(__dirname + '/../static/bower_components'));
 
 require('./routes.js')(app);
-
-// Signup for test account
-
-/*var account_helper = require('./backend_helpers/account_helper.js');
-var signUp = account_helper.signUp;
-signUp({
-  username: 'test',
-  password: 'test',
-  isAdmin: false
-}, function (err, data) {
-  if (err) console.error(err);
-  console.log(data);
-});*/
