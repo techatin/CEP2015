@@ -1,4 +1,2 @@
 app/node_modules/
-app/config.js
-app/initDb.js
 static/bower_components/
